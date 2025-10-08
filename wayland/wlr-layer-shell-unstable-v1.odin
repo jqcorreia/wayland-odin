@@ -43,7 +43,7 @@ zwlr_layer_shell_v1_events: []wl_message = []wl_message{
 
 zwlr_layer_shell_v1_interface: wl_interface = {}
 @(init)
-init_zwlr_layer_shell_v1_interface :: proc() {
+init_zwlr_layer_shell_v1_interface :: proc "contextless" () {
 	zwlr_layer_shell_v1_interface = {
 		"zwlr_layer_shell_v1",
 		5,
@@ -57,10 +57,10 @@ init_zwlr_layer_shell_v1_interface :: proc() {
 ZWLR_LAYER_SHELL_V1_ERROR_ALREADY_CONSTRUCTED :: 2
 ZWLR_LAYER_SHELL_V1_ERROR_ROLE :: 0
 ZWLR_LAYER_SHELL_V1_ERROR_INVALID_LAYER :: 1
-ZWLR_LAYER_SHELL_V1_LAYER_OVERLAY :: 3
-ZWLR_LAYER_SHELL_V1_LAYER_BOTTOM :: 1
 ZWLR_LAYER_SHELL_V1_LAYER_TOP :: 2
+ZWLR_LAYER_SHELL_V1_LAYER_BOTTOM :: 1
 ZWLR_LAYER_SHELL_V1_LAYER_BACKGROUND :: 0
+ZWLR_LAYER_SHELL_V1_LAYER_OVERLAY :: 3
 
 zwlr_layer_surface_v1 :: struct {}
 zwlr_layer_surface_v1_listener :: struct {
@@ -186,7 +186,7 @@ zwlr_layer_surface_v1_events: []wl_message = []wl_message{
 
 zwlr_layer_surface_v1_interface: wl_interface = {}
 @(init)
-init_zwlr_layer_surface_v1_interface :: proc() {
+init_zwlr_layer_surface_v1_interface :: proc "contextless" () {
 	zwlr_layer_surface_v1_interface = {
 		"zwlr_layer_surface_v1",
 		5,
@@ -197,14 +197,14 @@ init_zwlr_layer_surface_v1_interface :: proc() {
 	}
 }
 
+ZWLR_LAYER_SURFACE_V1_KEYBOARD_INTERACTIVITY_NONE :: 0
 ZWLR_LAYER_SURFACE_V1_KEYBOARD_INTERACTIVITY_EXCLUSIVE :: 1
 ZWLR_LAYER_SURFACE_V1_KEYBOARD_INTERACTIVITY_ON_DEMAND :: 2
-ZWLR_LAYER_SURFACE_V1_KEYBOARD_INTERACTIVITY_NONE :: 0
+ZWLR_LAYER_SURFACE_V1_ERROR_INVALID_SIZE :: 1
 ZWLR_LAYER_SURFACE_V1_ERROR_INVALID_ANCHOR :: 2
+ZWLR_LAYER_SURFACE_V1_ERROR_INVALID_EXCLUSIVE_EDGE :: 4
 ZWLR_LAYER_SURFACE_V1_ERROR_INVALID_SURFACE_STATE :: 0
 ZWLR_LAYER_SURFACE_V1_ERROR_INVALID_KEYBOARD_INTERACTIVITY :: 3
-ZWLR_LAYER_SURFACE_V1_ERROR_INVALID_EXCLUSIVE_EDGE :: 4
-ZWLR_LAYER_SURFACE_V1_ERROR_INVALID_SIZE :: 1
 ZWLR_LAYER_SURFACE_V1_ANCHOR_TOP :: 1
 ZWLR_LAYER_SURFACE_V1_ANCHOR_LEFT :: 4
 ZWLR_LAYER_SURFACE_V1_ANCHOR_RIGHT :: 8

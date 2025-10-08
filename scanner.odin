@@ -567,7 +567,7 @@ emit_private_code :: proc(out: os.Handle, interface: Interface) {
 	// which we should not use in odin
 	fmt.fprintf(out, "%s_interface: wl_interface = {{}}\n", interface.name)
 	fmt.fprintf(out, "@(init)\n")
-	fmt.fprintf(out, "init_%s_interface :: proc() {{\n", interface.name)
+	fmt.fprintf(out, "init_%s_interface :: proc \"contextless\" () {{\n", interface.name)
 	fmt.fprintf(out, "\t%s_interface = {{\n", interface.name)
 	fmt.fprintf(out, "\t\t\"%s\",\n", interface.name)
 	fmt.fprintf(out, "\t\t%s,\n", interface.version)
