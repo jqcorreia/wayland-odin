@@ -638,6 +638,9 @@ main :: proc() {
 	fmt.fprintln(out, "import \"core:c\"\n")
 
 	doc, err := xml.load_from_file(cfg.input_path)
+	if err != nil {
+		fmt.println(err)
+	}
 
 	// Parse
 	for el in doc.elements {
