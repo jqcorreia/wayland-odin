@@ -8,33 +8,20 @@
   outputs =
     { self, nixpkgs }:
     let
-      pkgs = nixpkgs.legacyPackages.x86_64-linux;
-      odin_updated = pkgs.odin.overrideAttrs (
-        finalAttrs: previousAttrs: {
-          version = "dev-2025-01";
-          src = pkgs.fetchFromGitHub {
-            owner = "odin-lang";
-            repo = "Odin";
-            rev = "2aae4cfd461860bd10dcb922f867c98212a11449";
-            hash = "sha256-GXea4+OIFyAhTqmDh2q+ewTUqI92ikOsa2s83UH2r58=";
-          };
-        }
-      );
+      system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${system};
+      build_packages = with pkgs; [
+        wayland
+        wayland-scanner
+        wayland-protocols
+        odin
+      ];
     in
     {
-      devShells.x86_64-linux.default = pkgs.mkShell {
-        packages = with pkgs; [
-          wayland
-          wayland-scanner
-          wayland-protocols
-          gdb
-          seer
-          # odin
-          odin_updated
-          libGL
-        ];
+      devShells.${system}.default = pkgs.mkShell {
+        packages = build_packages;
         shellHook = "zsh";
-        name = "odin dev shell";
+        name = "arena dev shell";
       };
     };
 }
