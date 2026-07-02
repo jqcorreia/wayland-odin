@@ -1390,7 +1390,7 @@ render_in_layout_file :: proc(
 	err: Render_Error,
 ) {
 	// Read layout file.
-	layout, _ := os.read_entire_file_from_filename(layout_filename, allocator)
+	layout, _ := os.read_entire_file_from_path(layout_filename, allocator)
 
 	// Parse template.
 	lexer := lexer_make(allocator)
@@ -1419,7 +1419,7 @@ render_from_filename :: proc(
 	err: Render_Error,
 ) {
 	// Read template file.
-	src, _ := os.read_entire_file_from_filename(filename, allocator)
+	src, _ := os.read_entire_file_from_path(filename, allocator)
 
 	// Parse template.
 	lexer := lexer_make(allocator)
@@ -1449,7 +1449,7 @@ render_from_filename_in_layout :: proc(
 ) {
 
 	// Read template file and trim the trailing newline.
-	src, _ := os.read_entire_file_from_filename(filename, allocator)
+	src, _ := os.read_entire_file_from_path(filename, allocator)
 	if rune(src[len(src) - 1]) == '\n' {
 		src = src[0:len(src) - 1]
 	}
@@ -1482,13 +1482,13 @@ render_from_filename_in_layout_file :: proc(
 ) {
 
 	// Read template file and trim the trailing newline.
-	src, _ := os.read_entire_file_from_filename(filename, allocator)
+	src, _ := os.read_entire_file_from_path(filename, allocator)
 	if rune(src[len(src) - 1]) == '\n' {
 		src = src[0:len(src) - 1]
 	}
 
 	// Read layout file.
-	layout, _ := os.read_entire_file_from_filename(layout_filename, allocator)
+	layout, _ := os.read_entire_file_from_path(layout_filename, allocator)
 
 	// Parse template.
 	lexer := lexer_make(allocator)
@@ -1515,7 +1515,7 @@ render_with_json :: proc(
 	err: Render_Error,
 ) {
 	// Load JSON.
-	json_src, _ := os.read_entire_file_from_filename(json_filename, allocator)
+	json_src, _ := os.read_entire_file_from_path(json_filename, allocator)
 	json_data := json.parse(json_src, allocator = allocator) or_return
 	json_root := json_data.(json.Object)
 
@@ -1544,7 +1544,7 @@ render_with_json_in_layout :: proc(
 	err: Render_Error,
 ) {
 	// Load JSON.
-	json_src, _ := os.read_entire_file_from_filename(json_filename, allocator)
+	json_src, _ := os.read_entire_file_from_path(json_filename, allocator)
 	json_data := json.parse(json_src, allocator = allocator) or_return
 	json_root := json_data.(json.Object)
 
@@ -1574,10 +1574,10 @@ render_with_json_in_layout_file :: proc(
 	err: Render_Error,
 ) {
 	// Read layout file.
-	layout, _ := os.read_entire_file_from_filename(layout_filename, allocator)
+	layout, _ := os.read_entire_file_from_path(layout_filename, allocator)
 
 	// Load JSON.
-	json_src, _ := os.read_entire_file_from_filename(json_filename, allocator)
+	json_src, _ := os.read_entire_file_from_path(json_filename, allocator)
 	json_data := json.parse(json_src, allocator = allocator) or_return
 	json_root := json_data.(json.Object)
 
@@ -1606,10 +1606,10 @@ render_from_filename_with_json :: proc(
 	err: Render_Error,
 ) {
 	// Read template file.
-	src, _ := os.read_entire_file_from_filename(filename, allocator)
+	src, _ := os.read_entire_file_from_path(filename, allocator)
 
 	// Load JSON.
-	json_src, _ := os.read_entire_file_from_filename(json_filename, allocator)
+	json_src, _ := os.read_entire_file_from_path(json_filename, allocator)
 	json_data := json.parse(json_src) or_return
 	defer json.destroy_value(json_data)
 	json_root := json_data.(json.Object)
@@ -1639,13 +1639,13 @@ render_from_filename_with_json_in_layout :: proc(
 	err: Render_Error,
 ) {
 	// Read template file and trim the trailing newline.
-	src, _ := os.read_entire_file_from_filename(filename, allocator)
+	src, _ := os.read_entire_file_from_path(filename, allocator)
 	if rune(src[len(src) - 1]) == '\n' {
 		src = src[0:len(src) - 1]
 	}
 
 	// Load JSON.
-	json_src, _ := os.read_entire_file_from_filename(json_filename, allocator)
+	json_src, _ := os.read_entire_file_from_path(json_filename, allocator)
 	json_data := json.parse(json_src, allocator = allocator) or_return
 	json_root := json_data.(json.Object)
 
@@ -1675,16 +1675,16 @@ render_from_filename_with_json_in_layout_file :: proc(
 	err: Render_Error,
 ) {
 	// Read template file and trim the trailing newline.
-	src, _ := os.read_entire_file_from_filename(filename, allocator)
+	src, _ := os.read_entire_file_from_path(filename, allocator)
 	if rune(src[len(src) - 1]) == '\n' {
 		src = src[0:len(src) - 1]
 	}
 
 	// Read layout file.
-	layout, _ := os.read_entire_file_from_filename(layout_filename, allocator)
+	layout, _ := os.read_entire_file_from_path(layout_filename, allocator)
 
 	// Load JSON.
-	json_src, _ := os.read_entire_file_from_filename(json_filename, allocator)
+	json_src, _ := os.read_entire_file_from_path(json_filename, allocator)
 	json_data := json.parse(json_src, allocator = allocator) or_return
 	json_root := json_data.(json.Object)
 

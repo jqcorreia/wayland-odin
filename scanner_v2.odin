@@ -2,6 +2,7 @@
 package wayland
 
 import "core:encoding/xml"
+
 import "core:fmt"
 import "core:os"
 import "core:strings"
@@ -355,11 +356,8 @@ process_interface :: proc(doc: ^xml.Document, el: xml.Element) -> Interface {
 	return interface
 }
 
-emit_interface_code :: proc(out: os.Handle, interface: Interface) {
-	template :=
-		os.read_entire_file_from_filename("templates/interface.txt") or_else panic(
-			"template does not exist",
-		)
+emit_interface_code :: proc(out: ^os.File, interface: Interface) {
+	template := #load("./templates/interface.txt")
 
 	result, _ := mustache.render(string(template), interface)
 	fmt.println(result)
@@ -373,22 +371,18 @@ emit_interface_code :: proc(out: os.Handle, interface: Interface) {
 	// emit_enums(out, interface)
 }
 
-emit_events_union :: proc(out: os.Handle) {
+emit_events_union :: proc(out: ^os.File) {
 	data: struct {
 		items: []Event,
 	} = {
 		items = global_events[:],
 	}
-	template :=
-		os.read_entire_file_from_filename("templates/events.txt") or_else panic(
-			"template does not exist",
-		)
-
+	template := #load("./templates/events.txt")
 	result, _ := mustache.render(string(template), data)
 	fmt.println(result)
 	fmt.fprint(out, result)
 }
-emit_enums :: proc(out: os.Handle, interface: Interface) {
+emit_enums :: proc(out: ^os.File, interface: Interface) {
 	for _enum in interface.enums {
 		for key, value in _enum.values {
 			fmt.fprintf(
@@ -404,7 +398,7 @@ emit_enums :: proc(out: os.Handle, interface: Interface) {
 	fmt.fprintf(out, "\n")
 }
 
-emit_destroy :: proc(out: os.Handle, interface: Interface) {
+emit_destroy :: proc(out: ^os.File, interface: Interface) {
 	// Emit function destroy
 	if interface.name == "wl_display" {
 		return
@@ -438,7 +432,7 @@ emit_destroy :: proc(out: os.Handle, interface: Interface) {
 	}
 }
 
-emit_listeners :: proc(out: os.Handle, interface: Interface) {
+emit_listeners :: proc(out: ^os.File, interface: Interface) {
 	fmt.fprintf(out, "%s_listener :: struct {{\n", interface.name)
 
 	// Generate listener code based on interface event
@@ -499,7 +493,7 @@ emit_listeners :: proc(out: os.Handle, interface: Interface) {
 	)
 }
 
-emit_request_stubs :: proc(out: os.Handle, interface: Interface) {
+emit_request_stubs :: proc(out: ^os.File, interface: Interface) {
 	// Generate requests code on interface requests
 	// This is mostly a verbatim port of the original scanner.c code
 	for request in interface.requests {
@@ -674,7 +668,7 @@ emit_args_string :: proc(args: [dynamic]Arg) -> string {
 	return res
 }
 
-emit_requests_message :: proc(out: os.Handle, request: Request) {
+emit_requests_message :: proc(out: ^os.File, request: Request) {
 	ret: ^Arg = nil
 
 	type_arr: [dynamic]string = {}
@@ -701,7 +695,7 @@ emit_requests_message :: proc(out: os.Handle, request: Request) {
 	fmt.fprintf(out, "\", raw_data([]^wl_interface{{%s}}) }},\n", strings.join(type_arr[:], ", "))
 }
 
-emit_events_message :: proc(out: os.Handle, event: Event) {
+emit_events_message :: proc(out: ^os.File, event: Event) {
 	ret: ^Arg = nil
 
 	type_arr: [dynamic]string = {}
@@ -720,7 +714,7 @@ emit_events_message :: proc(out: os.Handle, event: Event) {
 	fmt.fprintf(out, "\", raw_data([]^wl_interface{{%s}}) }},\n", strings.join(type_arr[:], ", "))
 }
 
-emit_private_code :: proc(out: os.Handle, interface: Interface) {
+emit_private_code :: proc(out: ^os.File, interface: Interface) {
 	// Requests struct
 	fmt.fprintf(out, "%s_requests: []wl_message = []wl_message{{\n", interface.name)
 	for request in interface.requests {
@@ -804,7 +798,7 @@ main :: proc() {
 	}
 	fmt.println(cfg)
 
-	out, _ := os.open(cfg.output_path, os.O_CREATE | os.O_TRUNC | os.O_RDWR, os.S_IRWXU)
+	out, _ := os.open(cfg.output_path, { .Read, .Write, .Create, .Trunc}, { .Read_User, .Write_User, })
 
 	interfaces: [dynamic]Interface
 
